@@ -10,16 +10,17 @@ export default class HelloWorld extends H5P.EventDispatcher {
     super();
     this.root = document.createElement("div");
     this.root.innerText = params.textField.replace("%username", "World");
-
-    /**
-     * Attach library to wrapper.
-     * @param $wrapper Content's container.
-     */
-    this.attach = function (wrapper: JQuery) {
-      wrapper?.get(0)?.classList.add("h5p-hello-world");
-      wrapper?.get(0)?.appendChild(this.root);
-    };
   }
+  /**
+   * Attach library to wrapper.
+   * @param $wrapper Content's container.
+   */
+  attach = (wrapper: JQuery) => {
+    wrapper?.get(0)?.classList.add("h5p-hello-world");
+    wrapper?.get(0)?.appendChild(this.root);
+    const dialog = new H5P.Dialog("Test", "Test", "Test", wrapper);
+    dialog.open(true);
+  };
 
   private root: HTMLElement;
 }
