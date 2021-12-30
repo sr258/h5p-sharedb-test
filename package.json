@@ -24,6 +24,7 @@
     "@babel/plugin-transform-destructuring": "^7.12.13",
     "@babel/preset-env": "^7.12.10",
     "@types/jquery": "^3.5.11",
+    "@types/react": "^17.0.38",
     "@types/sharedb": "^2.2.0",
     "babel-loader": "^8.2.2",
     "cross-env": "^7.0.3",
@@ -40,6 +41,7 @@
   },
   "dependencies": {
     "@h5p-types/h5p-core": "^0.2.0",
+    "react": "^17.0.2",
     "reconnecting-websocket": "^4.4.0",
     "sharedb": "^2.2.1"
   }
