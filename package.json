@@ -39,6 +39,7 @@
     "webpack-cli": "^4.0.0"
   },
   "dependencies": {
+    "@h5p-types/h5p-core": "^0.2.0",
     "reconnecting-websocket": "^4.4.0",
     "sharedb": "^2.2.1"
   }

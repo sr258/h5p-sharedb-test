@@ -1,22 +1,22 @@
 {
-  "title": "Hello world",
-  "description": "Example H5P content type for getting started",
-  "majorVersion": 1,
-  "minorVersion": 0,
+  "title": "ShareDB Test",
+  "description": "ShareDB Test Content Type",
+  "majorVersion": 0,
+  "minorVersion": 1,
   "patchVersion": 0,
   "runnable": 1,
-  "author": "Joubel",
+  "author": "S. Rettig",
   "license": "MIT",
-  "machineName": "H5P.HelloWorld",
+  "machineName": "H5P.ShareDBTest",
   "embedTypes": ["iframe"],
   "preloadedJs": [
     {
-      "path": "dist/h5p-hello-world.js"
+      "path": "dist/sharedb-test.js"
     }
   ],
   "preloadedCss": [
     {
-      "path": "dist/h5p-hello-world.css"
+      "path": "dist/sharedb-test.css"
     }
   ]
 }
