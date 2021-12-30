@@ -34,7 +34,12 @@ export default class ShareDBTest {
     wrapper?.get(0)?.classList.add("sharedb-test");
     wrapper?.get(0)?.appendChild(this.root);
     ReactDOM.render(
-      <Main text={"start"} onChange={this.changeData} />,
+      <Main
+        votesDown={0}
+        votesUp={0}
+        voteDown={this.voteDown}
+        voteUp={this.voteUp}
+      />,
       this.root
     );
   };
@@ -42,12 +47,29 @@ export default class ShareDBTest {
   refreshData = async (data: Doc): Promise<void> => {
     console.log("Refreshing data", data);
     ReactDOM.render(
-      <Main text={data.text} onChange={this.changeData} />,
+      <Main
+        votesDown={data.votesDown.length}
+        votesUp={data.votesUp.length}
+        voteDown={this.voteDown}
+        voteUp={this.voteUp}
+      />,
       this.root
     );
   };
 
-  public changeData = (oldText: string, newText: string): void => {
-    this.connector.submitOp([{ p: ["text"], od: oldText, oi: newText }]);
+  public voteUp = (): void => {
+    console.log("voting up");
+    this.connector.submitOp([
+      { p: ["votesUp", 0], li: H5PIntegration.user.id.toString() },
+    ]);
+    console.log("voted up");
+  };
+
+  public voteDown = (): void => {
+    console.log("voting down");
+    this.connector.submitOp([
+      { p: ["votesDown", 0], li: H5PIntegration.user.id.toString() },
+    ]);
+    console.log("voted down");
   };
 }

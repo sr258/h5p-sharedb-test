@@ -1,25 +1,35 @@
-import React, { useRef } from "react";
+import React from "react";
 
 export default function ({
-  text,
-  onChange,
+  votesUp,
+  votesDown,
+  voteUp,
+  voteDown,
 }: {
-  text?: string;
-  onChange: (oldValue: string, newValue: string) => void;
+  votesUp: number;
+  votesDown: number;
+  voteUp: () => void;
+  voteDown: () => void;
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   return (
     <div>
-      <h1>Text: {text}</h1>
-      <input type="text" ref={inputRef}></input>
+      <h1>Voting machine</h1>
+      <div>{votesUp}</div>
       <button
         onClick={() => {
-          if (inputRef.current?.value && text) {
-            onChange(text, inputRef.current.value);
-          }
+          voteUp();
         }}
-      ></button>
+      >
+        👍
+      </button>
+      <div>{votesDown}</div>
+      <button
+        onClick={() => {
+          voteDown();
+        }}
+      >
+        👎
+      </button>
     </div>
   );
 }

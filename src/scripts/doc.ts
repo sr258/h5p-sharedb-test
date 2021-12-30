@@ -5,7 +5,9 @@ export default class Doc extends ShareDBDocument {
     super();
   }
   seed(): void {
-    this.text = "init";
+    this.votesDown = [];
+    this.votesUp = [];
   }
-  public text: string = "";
+  public votesUp: string[] = [];
+  public votesDown: string[] = [];
 }
