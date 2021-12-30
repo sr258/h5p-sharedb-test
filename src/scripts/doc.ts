@@ -5,7 +5,7 @@ export default class Doc extends ShareDBDocument {
     super();
   }
   seed(): void {
-    this.text = "start";
+    this.text = "init";
   }
   public text: string = "";
 }

@@ -1,14 +1,17 @@
 import Doc from "./doc";
 import ShareDBConnector from "./sharedb-connector";
 
-export default class ShareDBTest extends H5P.ContentType(true) {
+import React from "react";
+import * as ReactDOM from "react-dom";
+import Main from "./components/Main";
+
+export default class ShareDBTest {
   /**
    * @param params Parameters passed by the editor.
    * @param contentId Content's id.
    * @param extras Saved state, metadata, etc.
    */
   constructor(params: any, contentId: string, extras: any = {}) {
-    super();
     this.root = document.createElement("div");
     const serverConfig: { serverUrl: string } =
       H5P.getLibraryConfig("H5P.ShareDBTest");
@@ -30,10 +33,21 @@ export default class ShareDBTest extends H5P.ContentType(true) {
   attach = (wrapper: JQuery) => {
     wrapper?.get(0)?.classList.add("sharedb-test");
     wrapper?.get(0)?.appendChild(this.root);
+    ReactDOM.render(
+      <Main text={"start"} onChange={this.changeData} />,
+      this.root
+    );
   };
 
   refreshData = async (data: Doc): Promise<void> => {
     console.log("Refreshing data", data);
-    this.root.innerText = data.text;
+    ReactDOM.render(
+      <Main text={data.text} onChange={this.changeData} />,
+      this.root
+    );
+  };
+
+  public changeData = (oldText: string, newText: string): void => {
+    this.connector.submitOp([{ p: ["text"], od: oldText, oi: newText }]);
   };
 }

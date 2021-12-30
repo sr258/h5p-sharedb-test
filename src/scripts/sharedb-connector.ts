@@ -27,19 +27,15 @@ export default class ShareDBConnector<T extends ShareDBDocument> {
   private connection: Connection;
   private doc: Doc<T>;
 
-  refresh = async (error?: any) => {
-    if (!error) {
-      if (this.doc.type === null) {
-        const newDoc = new this.T();
-        newDoc.seed();
-        this.doc.create(newDoc, (error) => {
-          console.error(error);
-        });
-      } else {
-        await this.refreshCallback(this.doc.data);
-      }
+  refresh = async () => {
+    if (this.doc.type === null) {
+      const newDoc = new this.T();
+      newDoc.seed();
+      this.doc.create(newDoc, (error) => {
+        console.error(error);
+      });
     } else {
-      console.log("Error getting document from server: ", error);
+      await this.refreshCallback(this.doc.data);
     }
   };
 
