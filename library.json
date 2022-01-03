@@ -18,5 +18,12 @@
     {
       "path": "dist/sharedb-test.css"
     }
-  ]
+  ],
+  "requiredExtensions": {
+    "sharedState": 1
+  },
+  "state": {
+    "snapshotSchema": true,
+    "opSchema": true
+  }
 }
