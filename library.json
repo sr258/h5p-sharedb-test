@@ -24,6 +24,8 @@
   },
   "state": {
     "snapshotSchema": true,
-    "opSchema": true
+    "opSchema": true,
+    "opLogicTests": true,
+    "snapshotLogicTests": true
   }
 }

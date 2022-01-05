@@ -20,6 +20,24 @@
             "type": "string"
           }
         }
+      },
+      {
+        "type": "object",
+        "properties": {
+          "p": {
+            "type": "array",
+            "prefixItems": [{ "enum": ["votesUp", "votesDown"] }],
+            "maxItems": 1,
+            "minItems": 1
+          },
+          "od": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "oi": {
+            "type": "array"
+          }
+        }
       }
     ]
   }

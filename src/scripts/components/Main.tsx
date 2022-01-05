@@ -3,13 +3,17 @@ import React from "react";
 export default function ({
   votesUp,
   votesDown,
+  isTeacher,
   voteUp,
   voteDown,
+  clear,
 }: {
   votesUp: number;
   votesDown: number;
   voteUp: () => void;
   voteDown: () => void;
+  clear: () => void;
+  isTeacher: boolean;
 }) {
   return (
     <div>
@@ -30,6 +34,7 @@ export default function ({
       >
         👎
       </button>
+      {isTeacher && <button onClick={clear}>Clear</button>}
     </div>
   );
 }

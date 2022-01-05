@@ -11,7 +11,12 @@ export default class ShareDBTest {
    * @param contentId Content's id.
    * @param extras Saved state, metadata, etc.
    */
-  constructor(params: any, contentId: string, extras: any = {}) {
+  constructor(params: any, private contentId: string, extras: any = {}) {
+    if (H5PIntegration.contents) {
+      const contentData = H5PIntegration.contents[`cid-${this.contentId}`];
+      this.accessLevel = (contentData as any).accessLevel;
+    }
+    console.log("access level: ", this.accessLevel);
     this.root = document.createElement("div");
     const serverConfig: { serverUrl: string } =
       H5P.getLibraryConfig("H5P.ShareDBTest");
@@ -25,6 +30,8 @@ export default class ShareDBTest {
 
   private root: HTMLElement;
   private connector: ShareDBConnector<Doc>;
+  private accessLevel: "privileged" | "user" | undefined = undefined;
+  private data?: Doc;
 
   /**
    * Attach library to wrapper.
@@ -39,6 +46,8 @@ export default class ShareDBTest {
         votesUp={0}
         voteDown={this.voteDown}
         voteUp={this.voteUp}
+        isTeacher={this.accessLevel === "privileged"}
+        clear={this.clear}
       />,
       this.root
     );
@@ -46,12 +55,15 @@ export default class ShareDBTest {
 
   refreshData = async (data: Doc): Promise<void> => {
     console.log("Refreshing data", data);
+    this.data = data;
     ReactDOM.render(
       <Main
         votesDown={data.votesDown.length}
         votesUp={data.votesUp.length}
         voteDown={this.voteDown}
         voteUp={this.voteUp}
+        isTeacher={this.accessLevel === "privileged"}
+        clear={this.clear}
       />,
       this.root
     );
@@ -71,5 +83,16 @@ export default class ShareDBTest {
       { p: ["votesDown", 0], li: H5PIntegration.user.id.toString() },
     ]);
     console.log("voted down");
+  };
+
+  public clear = (): void => {
+    if (this.data) {
+      console.log("clearing");
+      this.connector.submitOp([
+        { p: ["votesDown"], od: this.data.votesDown, oi: [] },
+        { p: ["votesUp"], od: this.data.votesUp, oi: [] },
+      ]);
+      console.log("cleared");
+    }
   };
 }
