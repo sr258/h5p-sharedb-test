@@ -2,6 +2,11 @@
   {
     "$or": [
       {
+        "$defined": {
+          "$query": "$.create"
+        }
+      },
+      {
         "$and": [
           {
             "$or": [
