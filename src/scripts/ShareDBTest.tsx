@@ -1,10 +1,13 @@
-import Doc from "./doc";
-import ShareDBConnector from "./sharedb-connector";
-
 import React from "react";
 import * as ReactDOM from "react-dom";
-import Main from "./components/Main";
 
+import VotesDoc from "./VotesDoc";
+import Main from "./components/Main";
+import ShareDBConnector from "./ShareDBConnector";
+
+/**
+ * The H5P content type class.
+ */
 export default class ShareDBTest {
   /**
    * @param params Parameters passed by the editor.
@@ -12,7 +15,11 @@ export default class ShareDBTest {
    * @param extras Saved state, metadata, etc.
    */
   constructor(params: any, private contentId: string, extras: any = {}) {
+    // Create render root
     this.root = document.createElement("div");
+
+    // The shared-state server configuration is provided by the H5P plugin of
+    // the host system. (Must be configured there)
     const serverConfig: { serverUrl: string; auth: string } =
       H5P.getLibraryConfig("H5P.ShareDBTest");
     fetch(serverConfig.auth + "/" + contentId, {
@@ -21,17 +28,19 @@ export default class ShareDBTest {
     }).then(async (auth) => {
       this.userInformation = await auth.json();
     });
-    this.connector = new ShareDBConnector<Doc>(
+
+    // Initialize connection to ShareDB server
+    this.connector = new ShareDBConnector<VotesDoc>(
       serverConfig.serverUrl,
       contentId,
       this.refreshData,
-      Doc
+      VotesDoc
     );
   }
 
   private root: HTMLElement;
-  private connector: ShareDBConnector<Doc>;
-  private data?: Doc;
+  private connector: ShareDBConnector<VotesDoc>;
+  private data?: VotesDoc;
   private userInformation: {
     userId: string;
     level: "anonymous" | "user" | "privileged";
@@ -41,12 +50,15 @@ export default class ShareDBTest {
   };
 
   /**
-   * Attach library to wrapper.
-   * @param $wrapper Content's container.
+   * Attach content type to DOM.
+   * @param wrapper the content's container.
    */
   attach = (wrapper: JQuery) => {
     wrapper?.get(0)?.classList.add("sharedb-test");
     wrapper?.get(0)?.appendChild(this.root);
+
+    // We render an initial state of the content type here. It will be updated
+    // later when the data from the server has arrived.
     ReactDOM.render(
       <Main
         votesDown={0}
@@ -60,8 +72,13 @@ export default class ShareDBTest {
     );
   };
 
-  refreshData = async (data: Doc): Promise<void> => {
-    console.log("Refreshing data", data);
+  /**
+   * This method is called when the ShareDB server has updated the shared state.
+   * React is clever enough to note replace the whole DOM when doing this. It
+   * only rerenders the changed parts.
+   */
+  refreshData = async (data: VotesDoc): Promise<void> => {
+    console.log("Refreshing data");
     this.data = data;
     ReactDOM.render(
       <Main
@@ -76,30 +93,37 @@ export default class ShareDBTest {
     );
   };
 
+  /**
+   * Submit operation when user clicked on "vote up" button.
+   */
   public voteUp = (): void => {
     console.log("voting up");
     this.connector.submitOp([
       { p: ["votesUp", 0], li: this.userInformation.userId },
     ]);
-    console.log("voted up");
   };
 
+  /**
+   * Submit operation when user clicked on "vote down" button.
+   */
   public voteDown = (): void => {
     console.log("voting down");
     this.connector.submitOp([
       { p: ["votesDown", 0], li: this.userInformation.userId },
     ]);
-    console.log("voted down");
   };
 
+  /**
+   * Submit operation when user clicked on "clear button"
+   */
   public clear = (): void => {
     if (this.data) {
       console.log("clearing");
+      // Clearing works by replacing the arrays with empty arrays
       this.connector.submitOp([
         { p: ["votesDown"], od: this.data.votesDown, oi: [] },
         { p: ["votesUp"], od: this.data.votesUp, oi: [] },
       ]);
-      console.log("cleared");
     }
   };
 }

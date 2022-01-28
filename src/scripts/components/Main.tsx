@@ -1,24 +1,31 @@
 import React from "react";
 
+/**
+ * A simple React functional component displaying the voting user interface
+ */
 export default function ({
-  votesUp,
-  votesDown,
-  isTeacher,
-  voteUp,
-  voteDown,
   clear,
+  isTeacher,
+  voteDown,
+  votesDown,
+  votesUp,
+  voteUp,
 }: {
-  votesUp: number;
-  votesDown: number;
-  voteUp: () => void;
-  voteDown: () => void;
   clear: () => void;
   isTeacher: boolean;
+  voteDown: () => void;
+  votesDown: number;
+  votesUp: number;
+  voteUp: () => void;
 }) {
   return (
     <div>
       <h1>Voting machine</h1>
-      <div>{votesUp}</div>
+      <p>
+        Click the buttons to like or dislike. You can only vote once. Further
+        votes will be ignored by the server. Editors can reset all votes.
+      </p>
+      <div>Likes: {votesUp}</div>
       <button
         onClick={() => {
           voteUp();
@@ -26,7 +33,7 @@ export default function ({
       >
         👍
       </button>
-      <div>{votesDown}</div>
+      <div>Dislike: {votesDown}</div>
       <button
         onClick={() => {
           voteDown();
