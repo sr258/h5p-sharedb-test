@@ -2,7 +2,6 @@
  * Concrete documents have to derive from this class.
  */
 export default abstract class ShareDBDocument {
-  constructor() {}
   /**
    * Feels this document with initial data that is then sent to server in the
    * create operation. This is called for the first user who uses the content

@@ -1,12 +1,12 @@
 {
-  "name": "h5p-boilerplate",
-  "version": "1.0.0",
-  "description": "Example H5P Content Type for getting started",
+  "name": "h5p-sharedb-test",
+  "version": "0.1.0",
+  "description": "Example H5P Content Type demonstrating how to use a shared state",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack",
-    "build:watch": "./node_modules/.bin/webpack --watch"
+    "build:watch": "./node_modules/.bin/webpack --watch",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
   },
   "repository": {
     "type": "git",
@@ -14,9 +14,10 @@
   },
   "keywords": [
     "h5p",
-    "library"
+    "library",
+    "sharedb"
   ],
-  "author": "Joubel",
+  "author": "S. Rettig",
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.16.7",
@@ -24,13 +25,17 @@
     "@babel/plugin-transform-destructuring": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
+    "@h5p-types/h5p-core": "^0.2.0",
     "@types/jquery": "^3.5.11",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "@types/sharedb": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "babel-loader": "^8.2.3",
     "cross-env": "^7.0.3",
     "css-loader": "^6.5.1",
+    "eslint": "^8.7.0",
     "mini-css-extract-plugin": "^2.4.5",
     "regenerator-runtime": "^0.13.9",
     "resolve-url-loader": "^4.0.0",
@@ -42,7 +47,6 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
-    "@h5p-types/h5p-core": "^0.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "reconnecting-websocket": "^4.4.0",
