@@ -12,14 +12,15 @@ export default class ShareDBTest {
    * @param extras Saved state, metadata, etc.
    */
   constructor(params: any, private contentId: string, extras: any = {}) {
-    if (H5PIntegration.contents) {
-      const contentData = H5PIntegration.contents[`cid-${this.contentId}`];
-      this.accessLevel = (contentData as any).accessLevel;
-    }
-    console.log("access level: ", this.accessLevel);
     this.root = document.createElement("div");
-    const serverConfig: { serverUrl: string } =
+    const serverConfig: { serverUrl: string; auth: string } =
       H5P.getLibraryConfig("H5P.ShareDBTest");
+    fetch(serverConfig.auth + "/" + contentId, {
+      mode: "cors",
+      credentials: "include",
+    }).then(async (auth) => {
+      this.userInformation = await auth.json();
+    });
     this.connector = new ShareDBConnector<Doc>(
       serverConfig.serverUrl,
       contentId,
@@ -30,8 +31,14 @@ export default class ShareDBTest {
 
   private root: HTMLElement;
   private connector: ShareDBConnector<Doc>;
-  private accessLevel: "privileged" | "user" | undefined = undefined;
   private data?: Doc;
+  private userInformation: {
+    userId: string;
+    level: "anonymous" | "user" | "privileged";
+  } = {
+    userId: "",
+    level: "anonymous",
+  };
 
   /**
    * Attach library to wrapper.
@@ -46,7 +53,7 @@ export default class ShareDBTest {
         votesUp={0}
         voteDown={this.voteDown}
         voteUp={this.voteUp}
-        isTeacher={this.accessLevel === "privileged"}
+        isTeacher={this.userInformation.level === "privileged"}
         clear={this.clear}
       />,
       this.root
@@ -62,7 +69,7 @@ export default class ShareDBTest {
         votesUp={data.votesUp.length}
         voteDown={this.voteDown}
         voteUp={this.voteUp}
-        isTeacher={this.accessLevel === "privileged"}
+        isTeacher={this.userInformation.level === "privileged"}
         clear={this.clear}
       />,
       this.root
@@ -72,7 +79,7 @@ export default class ShareDBTest {
   public voteUp = (): void => {
     console.log("voting up");
     this.connector.submitOp([
-      { p: ["votesUp", 0], li: H5PIntegration.user.id.toString() },
+      { p: ["votesUp", 0], li: this.userInformation.userId },
     ]);
     console.log("voted up");
   };
@@ -80,7 +87,7 @@ export default class ShareDBTest {
   public voteDown = (): void => {
     console.log("voting down");
     this.connector.submitOp([
-      { p: ["votesDown", 0], li: H5PIntegration.user.id.toString() },
+      { p: ["votesDown", 0], li: this.userInformation.userId },
     ]);
     console.log("voted down");
   };

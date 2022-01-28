@@ -32,7 +32,9 @@ export default class ShareDBConnector<T extends ShareDBDocument> {
       const newDoc = new this.T();
       newDoc.seed();
       this.doc.create(newDoc, (error) => {
-        console.error(error);
+        if (error) {
+          console.error("Error while creating ShareDB doc: ", error);
+        }
       });
     } else {
       await this.refreshCallback(this.doc.data);
