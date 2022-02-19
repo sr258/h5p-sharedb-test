@@ -40,12 +40,12 @@ export default class ShareDBConnector<T extends ShareDBDocument> {
       // document by seeding it and submitting the create op.
       const newDoc = new this.T();
       newDoc.seed();
-      this.doc.create(newDoc, (error) => {
+      this.doc.create(newDoc, async (error) => {
         if (error) {
           console.error("Error while creating ShareDB doc: ", error);
+        } else {
+          await this.refreshCallback(this.doc.data);
         }
-        // We don't need to call refreshCallback. This is already by ShareDB as
-        // it calls refresh again.
       });
     } else {
       await this.refreshCallback(this.doc.data);
